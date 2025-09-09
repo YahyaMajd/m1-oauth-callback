@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head><title>OAuth Callback</title></head>
+<body>
+<script>
+  // Extract the code from URL parameters
+  const urlParams = new URLSearchParams(window.location.search);
+  const code = urlParams.get('code');
+  
+  if (code) {
+    // Redirect to your Android app
+    window.location.href = `com.cpen321.usermanagement.github://callback?code=${code}`;
+  }
+</script>
+<p>Redirecting to app...</p>
+</body>
+</html>
