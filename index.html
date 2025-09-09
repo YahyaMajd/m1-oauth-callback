@@ -1,17 +1,43 @@
 <!DOCTYPE html>
 <html>
-<head><title>OAuth Callback</title></head>
+<head>
+    <title>OAuth Callback</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
 <body>
-<script>
-  // Extract the code from URL parameters
-  const urlParams = new URLSearchParams(window.location.search);
-  const code = urlParams.get('code');
-  
-  if (code) {
-    // Redirect to your Android app
-    window.location.href = `com.cpen321.usermanagement.github://callback?code=${code}`;
-  }
-</script>
-<p>Redirecting to app...</p>
+    <div id="status">
+        <p>Redirecting to app...</p>
+        <p><small>If the app doesn't open automatically, <a href="#" id="manual-link">click here</a></small></p>
+    </div>
+
+    <script>
+        // Extract the code from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('code');
+        const error = urlParams.get('error');
+        
+        if (error) {
+            document.getElementById('status').innerHTML = 
+                `<p style="color: red;">OAuth Error: ${error}</p>`;
+        } else if (code) {
+            const appUrl = `com.cpen321.usermanagement.github://callback?code=${code}`;
+            
+            // Try to open the app
+            window.location.href = appUrl;
+            
+            // Set up manual fallback
+            document.getElementById('manual-link').href = appUrl;
+            
+            // Show fallback after 3 seconds
+            setTimeout(() => {
+                document.getElementById('status').innerHTML += 
+                    '<p style="color: orange;">App not opening? Make sure it\'s installed and try the link above.</p>';
+            }, 3000);
+            
+        } else {
+            document.getElementById('status').innerHTML = 
+                '<p style="color: red;">No authorization code received.</p>';
+        }
+    </script>
 </body>
 </html>
